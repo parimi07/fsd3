@@ -1,0 +1,372 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Online store offering premium furniture">
+    <meta name="keywords" content="furniture, e-commerce, online store, premium, shop">
+    <meta name="author" content="Yogi and Team">
+    <title><%= title || 'Furniture Store' %></title> <!-- Use a variable for dynamic title -->
+
+    <!-- Favicon -->
+    <link rel="icon" href="https://cdn-icons-png.flaticon.com/512/149/149071.png" type="image/x-icon">
+
+    <!-- Google Font -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+
+    <style>
+        /* Reset styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: #f9f9f9;
+            color: #333;
+        }
+
+        /* Top navigation bar */
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background-color: #002147;
+            padding: 10px 20px;
+            color: white;
+        }
+
+        .navbar .logo {
+            font-size: 1.5em;
+            font-weight: bold;
+        }
+
+        .navbar ul {
+            list-style: none;
+            display: flex;
+            gap: 20px;
+        }
+
+        .navbar ul li {
+            display: inline-block;
+        }
+
+        .navbar ul li a {
+            color: white;
+            text-decoration: none;
+        }
+
+        .navbar-right {
+            display: flex;
+            align-items: center;
+            gap: 40px; 
+        }
+
+        .navbar-right a {
+            color: white;
+            text-decoration: none;
+        }
+
+        .navbar-right .login, .navbar-right .register {
+            font-weight: bold;
+        }
+
+        .search-bar {
+            background-color: #fff;
+            padding: 5px 10px;
+            border-radius: 5px;
+            border: none;
+        }
+
+        .search-bar input {
+            border: none;
+            outline: none;
+            padding: 5px;
+        }
+
+        .search-bar button {
+            background-color: #f39c12;
+            border: none;
+            padding: 9px 10px;
+            cursor: pointer;
+            color: white;
+        }
+
+        /* Hero section */
+        .hero {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: url('images/living1.jpg') center/cover no-repeat;
+            height: 90vh;
+            color: white;
+            position: relative;
+        }
+
+        .hero-content {
+            text-align: center;
+            z-index: 2;
+        }
+
+        .hero-content h1 {
+            font-size: 3em;
+            margin-bottom: 20px;
+        }
+
+        .hero-content p {
+            font-size: 1.2em;
+            margin-bottom: 30px;
+        }
+
+        .hero-content .btn {
+            background-color: #f39c12;
+            padding: 15px 30px;
+            border-radius: 5px;
+            text-decoration: none;
+            color: white;
+            font-weight: bold;
+            margin: 0 10px;
+            transition: background-color 0.3s;
+        }
+
+        .hero-content .btn:hover {
+            background-color: #e67e22;
+        }
+
+        .hero-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: rgba(0, 0, 0, 0.4);
+        }
+
+        /* Modal Styles */
+        #loginModal, #registerModal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.7);
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal-content {
+            background-color: white;
+            padding: 30px;
+            border-radius: 15px;
+            width: 400px;
+            text-align: center;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+        }
+
+        .modal-content h2 {
+            margin-bottom: 20px;
+            color: #002147;
+        }
+
+        .input-group {
+            position: relative;
+            margin-bottom: 20px;
+        }
+
+        .modal-content input {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 16px;
+        }
+
+        .modal-content button {
+            width: 100%;
+            padding: 10px;
+            background-color: #f39c12;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .modal-content button:hover {
+            background-color: #e67e22;
+        }
+
+        .close-modal {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            color: #999;
+            font-size: 20px;
+            cursor: pointer;
+        }
+
+        .modal-footer {
+            margin-top: 15px;
+            font-size: 14px;
+        }
+
+        .modal-footer a {
+            color: #f39c12;
+            text-decoration: none;
+        }
+
+        /* Error message styles */
+        .error-message {
+            color: red;
+            font-size: 14px;
+            font-style: italic;
+            margin-top: 5px;
+            text-align: left;
+        }
+
+        /* Responsive Styles */
+        @media (max-width: 768px) {
+            .navbar ul {
+                flex-direction: column;
+                gap: 10px;
+            }
+
+            .navbar-right {
+                flex-direction: column;
+                gap: 20px;
+            }
+
+            .hero-content h1 {
+                font-size: 2.5em;
+            }
+
+            .hero-content p {
+                font-size: 1em;
+            }
+
+            .modal-content {
+                width: 90%;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .navbar {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .hero-content h1 {
+                font-size: 1.8em;
+            }
+
+            .hero-content p {
+                font-size: 0.9em;
+            }
+
+            .btn {
+                padding: 10px 20px;
+                font-size: 0.9em;
+            }
+
+            .modal-content {
+                width: 95%;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Navigation Bar -->
+    <nav class="navbar">
+        <div class="logo">WoodMart</div>
+        <ul>
+            <li><a href="/"><%= title || 'Home' %></a></li> <!-- Adjusted to use EJS -->
+            <li><a href="/shop">Shop</a></li>
+            <li><a href="/about_us">About Us</a></li>
+            <li><a href="/contact_us">Contact</a></li>
+        </ul>
+        <div class="navbar-right">
+            <a href="javascript:void(0)" class="login" onclick="openModal('loginModal')">Login</a>
+            <a href="javascript:void(0)" class="register" onclick="openModal('registerModal')">Register</a>
+            <div class="search-bar">
+                <input type="text" placeholder="Search for products">
+                <button>Search</button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="hero-overlay"></div>
+        <div class="hero-content">
+            <h1>Reddington 6-Piece Set Furniture</h1>
+            <p>Sectional Living Room Sofa</p>
+            <a href="/view" class="btn">View More</a> <!-- Adjusted to use EJS -->
+            <a href="/shop" class="btn">Go to Shop</a> <!-- Adjusted to use EJS -->
+        </div>
+    </section>
+
+    <!-- Login Modal -->
+    <div id="loginModal" class="modal">
+        <div class="modal-content">
+            <span class="close-modal" onclick="closeModal('loginModal')">&times;</span>
+            <h2>Login</h2>
+            <form id="loginForm">
+                <div class="input-group">
+                    <input type="email" id="loginEmail" placeholder="Email" required>
+                    <div class="error-message" id="loginEmailError"></div>
+                </div>
+                <div class="input-group">
+                    <input type="password" id="loginPassword" placeholder="Password" required>
+                    <div class="error-message" id="loginPasswordError"></div>
+                </div>
+                <button type="submit">Login</button>
+            </form>
+            <div class="modal-footer">
+                <p>Don't have an account? <a href="javascript:void(0)" onclick="closeModal('loginModal'); openModal('registerModal')">Register</a></p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Register Modal -->
+    <div id="registerModal" class="modal">
+        <div class="modal-content">
+            <span class="close-modal" onclick="closeModal('registerModal')">&times;</span>
+            <h2>Register</h2>
+            <form id="registerForm">
+                <div class="input-group">
+                    <input type="text" id="registerName" placeholder="Full Name" required>
+                    <div class="error-message" id="registerNameError"></div>
+                </div>
+                <div class="input-group">
+                    <input type="email" id="registerEmail" placeholder="Email" required>
+                    <div class="error-message" id="registerEmailError"></div>
+                </div>
+                <div class="input-group">
+                    <input type="password" id="registerPassword" placeholder="Password" required>
+                    <div class="error-message" id="registerPasswordError"></div>
+                </div>
+                <button type="submit">Register</button>
+            </form>
+            <div class="modal-footer">
+                <p>Already have an account? <a href="javascript:void(0)" onclick="closeModal('registerModal'); openModal('loginModal')">Login</a></p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function openModal(modalId) {
+            document.getElementById(modalId).style.display = "flex";
+        }
+
+        function closeModal(modalId) {
+            document.getElementById(modalId).style.display = "none";
+        }
+    </script>
+</body>
+</html>
